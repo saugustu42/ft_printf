@@ -21,7 +21,7 @@ void		ft_putstr(char *str, int *printed)
 	}
 }
 
-int			ft_print_parced(const char *str, int *printed, va_list ap)
+void		ft_print_parsed(const char *str, int *printed, va_list ap)
 {
 	if (*str == '%')
 	{
@@ -35,22 +35,85 @@ int			ft_print_parced(const char *str, int *printed, va_list ap)
 	{
 		ft_putstr(va_arg(ap, char *), printed);
 	}
-	return (2);
 }
 
+int			ft_save_num(va_list ap, char **form)
+{
+	int		num;
+
+	num = 0;
+	if (**form == '*')
+	{
+		num = va_arg(ap, int);
+		(*form)++;
+	}
+	while (ft_isdigit(**form))
+	{
+		num = num * 10 + **form - '0';
+		(*form)++;
+	}
+	return (num);
+}
+
+void		ft_set_flags(t_flags *flags)
+{
+	flags->minus = 0;
+	flags->zero = 0;
+	flags->width = 0;
+	flags->dot = -1;
+}
+
+
+
+void		ft_parser(char **form, int *printed, va_list ap)
+{
+	t_flags flags;
+	
+	ft_set_flags(&flags);
+	while (**form == '-' || **form == '0')
+	{
+		if (**form == '-')
+			flags.minus = 1;
+		if (**form == '0')
+			flags.zero = 1;
+	}
+	flags.width = ft_save_num(ap, form);
+	if (flags.width < 0)
+	{
+		flags.zero = 1;
+		flags.width *= -1;
+	}
+	if (flags.minus)
+		flags.zero = 0;
+	if (**form == '.')
+		flags.dot = ft_save_num(ap, form);
+	ft_print_parsed(*form, printed, ap);
+}
+
+int		ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
 
 int			ft_printf(const char *form, ...)
 {
 	int		printed;
 
+	char *tmp;
 	va_list ap;
+
+	tmp = (char *)form;
 	va_start(ap, form);
 	printed = 0;
-	while (*form)
+	while (*tmp)
 	{
-		if (*form == '%' && *(form + 1))
+		if (*tmp == '%' && *(tmp + 1))
 		{
-			form += ft_print_parced(form + 1, &printed, ap);
+//			ft_parser(&((char *)(tmp + 1)), &printed, ap);
+			tmp++;
+			ft_parser(&(tmp), &printed, ap);
 		}
 		else
 		{
