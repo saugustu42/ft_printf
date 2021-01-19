@@ -88,6 +88,7 @@ void		ft_parser(char **form, int *printed, va_list ap)
 	if (**form == '.')
 		flags.dot = ft_save_num(ap, form);
 	ft_print_parsed(*form, printed, ap);
+	(*form)++;
 }
 
 int		ft_isdigit(int c)
@@ -111,14 +112,13 @@ int			ft_printf(const char *form, ...)
 	{
 		if (*tmp == '%' && *(tmp + 1))
 		{
-//			ft_parser(&((char *)(tmp + 1)), &printed, ap);
 			tmp++;
 			ft_parser(&(tmp), &printed, ap);
 		}
 		else
 		{
-			ft_putchar(*form, &printed);
-			form++;
+			ft_putchar(*tmp, &printed);
+			tmp++;
 		}
 	}
 	va_end(ap);

@@ -3,8 +3,8 @@
 
 int			main(void)
 {
-	int		n;
-
+	int		ret1;
+	int		ret2;
 /*
 	n = printf("Hello\n");
 	printf("%d\n\n", n);
@@ -16,8 +16,13 @@ int			main(void)
 */
 
 /* в чаре и проценте точность не применяется */
-	printf("hello %c hi\n", 'u');
+	ret1 = printf("hello %c hi\n", 'u');
+	ret2 = ft_printf("hello %c hi\n", 'u');
+	printf("orig %d my %d\n", ret1, ret2);
+/*
 	printf("hello %c hi\n", 'h');
+	ft_printf("hello %c hi\n", 'h');
+*/
 //	ft_printf("hello %c hi %%|\n", 'u');
 
 /*
