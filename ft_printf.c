@@ -12,32 +12,52 @@ void		ft_putnbr(int n, int *printed)
 	ft_putchar(n % 10 + '0', printed);
 }
 
+void		ft_putstr(char *str, int *printed)
+{
+	while (*str)
+	{
+		ft_putchar(*str, printed);
+		str++;
+	}
+}
+
+int			ft_print_parced(const char *str, int *printed, va_list ap)
+{
+	if (*str == '%')
+	{
+		ft_putchar('%', printed);
+	}
+	if (*str == 'c')
+	{
+		ft_putchar(va_arg(ap, int), printed);
+	}
+	if (*str == 's')
+	{
+		ft_putstr(va_arg(ap, char *), printed);
+	}
+	return (2);
+}
+
+
 int			ft_printf(const char *form, ...)
 {
 	int		printed;
-	int 	num_args;
 
-	va_list list;
-	va_start(list, form);
+	va_list ap;
+	va_start(ap, form);
 	printed = 0;
-	num_args = 0;
 	while (*form)
 	{
-		if (*form == '%' && *(form + 1) == '%')
+		if (*form == '%' && *(form + 1))
 		{
-			ft_putchar('%', &printed);
-			form++;
-		}
-		else if (*form == '%' && *(form + 1) != '%')
-		{
-			num_args++;
-			ft_putnbr(num_args, &printed);
-			form++;
+			form += ft_print_parced(form + 1, &printed, ap);
 		}
 		else
+		{
 			ft_putchar(*form, &printed);
-		form++;
+			form++;
+		}
 	}
-	va_end(list);
+	va_end(ap);
 	return (printed);
 }
