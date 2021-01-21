@@ -33,7 +33,7 @@ char		*ft_conv_pos(unsigned long n, int base)
 		if (n % base < 10)
 			str[char_count - 1] = n % base + '0';
 		else
-			str[char_count - 1] = n % base + 55;
+			str[char_count - 1] = n % base + 'a' - 10;
 		n = n / base;
 		char_count--;
 	}
@@ -83,13 +83,13 @@ int			ft_print_hex(int num, int *printed, char c)
 	str = ft_conv_pos(num, 16);
 	if (!str)
 		return (0);
-	if (c == 'x')
+	if (c == 'X')
 	{
 		i = 0;
 		while (str[i])
 		{
-			if (str[i] >= 'A' && str[i] <= 'F')
-				str[i] += ' ';
+			if (str[i] >= 'a' && str[i] <= 'f')
+				str[i] -= ' ';
 			i++;
 		}
 	}
@@ -98,7 +98,7 @@ int			ft_print_hex(int num, int *printed, char c)
 	return (1);
 }
 
-int			ft_print_p(unsigned long num, int *printed)
+//int			ft_print_p(unsigned long num, int *printed)
 
 int			ft_print_parsed(const char *str, int *printed, va_list ap)
 {
@@ -118,11 +118,13 @@ int			ft_print_parsed(const char *str, int *printed, va_list ap)
 		if (!(ft_print_hex(va_arg(ap, int), printed, *str)))
 			return (0);
 	}
+	/*
 	if (*str == 'p')
 	{
 		if (!(ft_print_p(va_arg(ap, unsigned long), printed. *str)))
 			return (0);
 	}
+	*/
 	return (1);
 }
 
