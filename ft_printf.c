@@ -1,6 +1,51 @@
 #include "ft_printf.h"
 #include <stdlib.h>
 
+char		*ft_strdup(const char *s)
+{
+	return (ft_strjoin(s, ""));
+}
+
+char		*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*new;
+	size_t	len1;
+	size_t	len2;
+
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	new = malloc(sizeof(char) * (len1 + len2 + 1));
+	if (new == NULL)
+		return (NULL);
+	ft_memcpy(new, s1, len1);
+	ft_memcpy(new + len1, s2, len2 + 1);
+	return (new);
+}
+
+size_t		ft_strlen(const char *s)
+{
+	size_t counter;
+
+	counter = 0;
+	while (*s++)
+		counter++;
+	return (counter);
+}
+
+void					*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char		*d;
+	const unsigned char	*s;
+
+	if (dst == NULL && src == NULL)
+		return (NULL);
+	d = (unsigned char*)dst;
+	s = (const unsigned char*)src;
+	while (n--)
+		*d++ = *s++;
+	return (dst);
+}
+
 static int	ch_count(unsigned long n, int base)
 {
 	int		counter;
@@ -19,10 +64,8 @@ char		*ft_conv_pos(unsigned long n, int base)
 	char	*str;
 	int		char_count;
 
-/*
 	if (n == 0)
 		return (ft_strdup("0"));
-*/
 	char_count = ch_count(n, base);
 	str = malloc(sizeof(char) * (char_count + 1));
 	if (str == NULL)
@@ -74,7 +117,6 @@ int			ft_print_u(unsigned int num, int *printed)
 }
 
 
-
 int			ft_print_hex(unsigned long num, int *printed, char c)
 {
 	char	*str;
@@ -121,15 +163,38 @@ int			ft_print_sig(int num, int *printed)
 	return (1);
 }
 
+void		ft_putnchar(char c, int *printed, int n)
+{
+	while (n--)
+		ft_putchar(c, printed, n);
+}
 
-int			ft_print_parsed(const char *str, int *printed, va_list ap)
+int			ft_print_s(char *str, int *printed, t_flags *flags)
+{
+	int		len;
+
+	if (str == NULL)
+	{
+		if (!(str = ft_strdup("(null)")))
+			return (0);
+	}
+	len = ft_strlen(str);
+	ft_putstr(str, printed);
+// need to free allocated
+	if (!flags->minus)
+		ft_putnchar(
+	
+}
+
+
+int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
 {
 	if (*str == '%')
 		ft_putchar('%', printed);
 	if (*str == 'c')
 		ft_putchar(va_arg(ap, int), printed);
 	if (*str == 's')
-		ft_putstr(va_arg(ap, char *), printed);
+		return (ft_print_s(va_arg(ap, char *), printed, flags));
 	if (*str == 'u')
 	{
 		if (!(ft_print_u(va_arg(ap, unsigned int), printed)))
@@ -201,7 +266,7 @@ int			ft_parser(char **form, int *printed, va_list ap)
 		flags.zero = 0;
 	if (**form == '.')
 		flags.dot = ft_save_num(ap, form);
-	if (!ft_print_parsed(*form, printed, ap))
+	if (!ft_print_parsed(*form, printed, ap, &flags))
 		return (0);
 	(*form)++;
 	return (1);
