@@ -189,6 +189,7 @@ int			ft_parser(char **form, int *printed, va_list ap)
 			flags.minus = 1;
 		if (**form == '0')
 			flags.zero = 1;
+		(*form)++;
 	}
 	flags.width = ft_save_num(ap, form);
 	if (flags.width < 0)

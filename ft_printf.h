@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 typedef struct	s_flags
 {
