@@ -75,7 +75,7 @@ int			ft_print_u(int num, int *printed)
 
 
 
-int			ft_print_hex(int num, int *printed, char c)
+int			ft_print_hex(unsigned long num, int *printed, char c)
 {
 	char	*str;
 	int		i;
@@ -98,7 +98,6 @@ int			ft_print_hex(int num, int *printed, char c)
 	return (1);
 }
 
-//int			ft_print_p(unsigned long num, int *printed)
 
 int			ft_print_parsed(const char *str, int *printed, va_list ap)
 {
@@ -118,13 +117,11 @@ int			ft_print_parsed(const char *str, int *printed, va_list ap)
 		if (!(ft_print_hex(va_arg(ap, int), printed, *str)))
 			return (0);
 	}
-	/*
 	if (*str == 'p')
 	{
-		if (!(ft_print_p(va_arg(ap, unsigned long), printed. *str)))
+		if (!(ft_print_hex(va_arg(ap, unsigned long), printed, *str)))
 			return (0);
 	}
-	*/
 	return (1);
 }
 

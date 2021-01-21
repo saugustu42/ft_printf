@@ -37,7 +37,7 @@ int			main(void)
 	printf("orig %d my %d\n\n", ret1, ret2);
 
 	printf("hello %p hi\n", &ret1);
-	ft_printf("hello %x hi\n", &ret1);
+	ft_printf("hello %p hi\n", &ret1);
 
 /*
 	printf("hello %c hi\n", 'h');
