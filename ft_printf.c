@@ -98,6 +98,29 @@ int			ft_print_hex(unsigned long num, int *printed, char c)
 	return (1);
 }
 
+int			ft_print_sig(int num, int *printed)
+{
+	long	n_long;
+	int		negative;
+	char	*str;
+
+	negative = 0;
+	n_long = num;
+	if (n_long < 0)
+	{
+		negative = 1;
+		n_long = -n_long;
+	}
+	str = ft_conv_pos(n_long, 10);
+	if (!str)
+		return (0);
+	if (negative)
+		ft_putchar('-', printed);
+	ft_putstr(str, printed);
+	free(str);
+	return (1);
+}
+
 
 int			ft_print_parsed(const char *str, int *printed, va_list ap)
 {
@@ -122,6 +145,8 @@ int			ft_print_parsed(const char *str, int *printed, va_list ap)
 		if (!(ft_print_hex(va_arg(ap, unsigned long), printed, *str)))
 			return (0);
 	}
+	if (*str == 'i' || *str == 'd')
+		return (ft_print_sig(va_arg(ap, int), printed));
 	return (1);
 }
 

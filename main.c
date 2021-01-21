@@ -39,6 +39,18 @@ int			main(void)
 	printf("hello %p hi\n", &ret1);
 	ft_printf("hello %p hi\n", &ret1);
 
+	ret1 = printf("hello %i hi\n", 42);
+	ret2 = ft_printf("hello %i hi\n", 42);
+	printf("orig %d my %d\n\n", ret1, ret2);
+
+	ret1 = printf("hello %i hi\n", -425);
+	ret2 = ft_printf("hello %i hi\n", -425);
+	printf("orig %d my %d\n\n", ret1, ret2);
+
+	ret1 = printf("hello %d hi\n", -2147483647 - 1);
+	ret2 = ft_printf("hello %d hi\n", -2147483647 - 1);
+	printf("orig %d my %d\n\n", ret1, ret2);
+
 /*
 	printf("hello %c hi\n", 'h');
 	ft_printf("hello %c hi\n", 'h');
