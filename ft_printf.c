@@ -61,7 +61,7 @@ void		ft_putstr(char *str, int *printed)
 	}
 }
 
-int			ft_print_u(int num, int *printed)
+int			ft_print_u(unsigned int num, int *printed)
 {
 	char	*str;
 
@@ -132,7 +132,7 @@ int			ft_print_parsed(const char *str, int *printed, va_list ap)
 		ft_putstr(va_arg(ap, char *), printed);
 	if (*str == 'u')
 	{
-		if (!(ft_print_u(va_arg(ap, int), printed)))
+		if (!(ft_print_u(va_arg(ap, unsigned int), printed)))
 			return (0);
 	}
 	if (*str == 'x' || *str == 'X')
