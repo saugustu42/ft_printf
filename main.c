@@ -18,7 +18,15 @@ int			main(void)
 /* в чаре и проценте точность не применяется */
 	ret1 = printf("hello %c hi\n", 'u');
 	ret2 = ft_printf("hello %c hi\n", 'u');
-	printf("orig %d my %d\n", ret1, ret2);
+	printf("orig %d my %d\n\n", ret1, ret2);
+
+	ret1 = printf("hello %s hi\n", "cat");
+	ret2 = ft_printf("hello %s hi\n", "cat");
+	printf("orig %d my %d\n\n", ret1, ret2);
+
+	ret1 = printf("hello %u hi\n", 4242);
+	ret2 = ft_printf("hello %u hi\n", 4242);
+	printf("orig %d my %d\n\n", ret1, ret2);
 /*
 	printf("hello %c hi\n", 'h');
 	ft_printf("hello %c hi\n", 'h');

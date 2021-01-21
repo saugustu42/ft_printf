@@ -1,4 +1,44 @@
 #include "ft_printf.h"
+#include <stdlib.h>
+
+static int	ch_count(unsigned long n, int base)
+{
+	int		counter;
+
+	counter = 0;
+	while (n)
+	{
+		n = n / base;
+		counter++;
+	}
+	return (counter);
+}
+
+char		*ft_conv_pos(unsigned long n, int base)
+{
+	char	*str;
+	int		char_count;
+
+/*
+	if (n == 0)
+		return (ft_strdup("0"));
+*/
+	char_count = ch_count(n, base);
+	str = malloc(sizeof(char) * (char_count + 1));
+	if (str == NULL)
+		return (NULL);
+	str[char_count] = '\0';
+	while (char_count && n)
+	{
+		if (n % base < 10)
+			str[char_count - 1] = n % base + '0';
+		else
+			str[char_count - 1] = n % base + 55;
+		n = n / base;
+		char_count--;
+	}
+	return (str);
+}
 
 void		ft_putchar(char c, int *printed)
 {
@@ -21,20 +61,32 @@ void		ft_putstr(char *str, int *printed)
 	}
 }
 
-void		ft_print_parsed(const char *str, int *printed, va_list ap)
+int			ft_print_u(int num, int *printed)
+{
+	char	*str;
+
+	str = ft_conv_pos(num, 10);
+	if (!str)
+		return (0);
+	ft_putstr(str, printed);
+	free(str);
+	return (1);
+}
+
+int			ft_print_parsed(const char *str, int *printed, va_list ap)
 {
 	if (*str == '%')
-	{
 		ft_putchar('%', printed);
-	}
 	if (*str == 'c')
-	{
 		ft_putchar(va_arg(ap, int), printed);
-	}
 	if (*str == 's')
-	{
 		ft_putstr(va_arg(ap, char *), printed);
+	if (*str == 'u')
+	{
+		if (!ft_print_u(va_arg(ap, int), printed))
+			return (0);
 	}
+	return (1);
 }
 
 int			ft_save_num(va_list ap, char **form)
@@ -65,7 +117,7 @@ void		ft_set_flags(t_flags *flags)
 
 
 
-void		ft_parser(char **form, int *printed, va_list ap)
+int			ft_parser(char **form, int *printed, va_list ap)
 {
 	t_flags flags;
 	
@@ -87,8 +139,10 @@ void		ft_parser(char **form, int *printed, va_list ap)
 		flags.zero = 0;
 	if (**form == '.')
 		flags.dot = ft_save_num(ap, form);
-	ft_print_parsed(*form, printed, ap);
+	if (!ft_print_parsed(*form, printed, ap))
+		return (0);
 	(*form)++;
+	return (1);
 }
 
 int		ft_isdigit(int c)
@@ -113,7 +167,11 @@ int			ft_printf(const char *form, ...)
 		if (*tmp == '%' && *(tmp + 1))
 		{
 			tmp++;
-			ft_parser(&(tmp), &printed, ap);
+			if (!(ft_parser(&(tmp), &printed, ap)))
+			{
+				printed = -1;
+				break;
+			}
 		}
 		else
 		{
