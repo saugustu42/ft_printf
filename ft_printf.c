@@ -104,18 +104,6 @@ void		ft_putstr(char *str, int *printed)
 	}
 }
 
-int			ft_print_u(unsigned int num, int *printed)
-{
-	char	*str;
-
-	str = ft_conv_pos(num, 10);
-	if (!str)
-		return (0);
-	ft_putstr(str, printed);
-	free(str);
-	return (1);
-}
-
 
 int			ft_print_hex(unsigned long num, int *printed, char c)
 {
@@ -221,6 +209,47 @@ int			ft_print_c(char c, int *printed, t_flags *flags)
 	return (1);
 }
 
+void		set_numbers(int len, t_flags *flags)
+{
+	int		bigger;
+	
+	bigger = len;
+	if (flags->dot > len)
+	{
+		bigger = flags->dot;
+		flags->dot = flags->dot - len;
+	}
+	else
+		flags->dot = 0;
+	if (flags->width > bigger)
+		flags->width = flags->width - bigger;
+	else
+		flags->width = 0;
+}
+
+int			ft_print_u(unsigned int num, int *printed, t_flags *flags)
+{
+	char	*str;
+	int		len;
+	int		fill;
+	char	filler;
+
+	filler = (flags->zero) ? '0' : ' ';
+	str = ft_conv_pos(num, 10);
+	if (!str)
+		return (0);
+	len = ft_strlen(str);
+	set_numbers(len, flags);
+	if (!flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+	ft_putnchar('0', printed, flags->dot);
+	ft_putstr(str, printed);
+	if (flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+	free(str);
+	return (1);
+}
+
 
 int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
 {
@@ -231,10 +260,7 @@ int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
 	if (*str == 's')
 		return (ft_print_s(va_arg(ap, char *), printed, flags));
 	if (*str == 'u')
-	{
-		if (!(ft_print_u(va_arg(ap, unsigned int), printed)))
-			return (0);
-	}
+		return (ft_print_u(va_arg(ap, unsigned int), printed, flags));
 	if (*str == 'x' || *str == 'X')
 	{
 		if (!(ft_print_hex(va_arg(ap, unsigned int), printed, *str)))

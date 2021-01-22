@@ -6,7 +6,7 @@ int	main(void)
 {
 	int	*tab = malloc(sizeof(int) * 10);
 	int	*tab2 = malloc(0);
-
+/*
 	ft_printf("--------------------%%c--------------------\n");
 	printf("01) standart PRINTF : |%c|\n", 'a');
 	ft_printf("01) my       PRINTF : |%c|\n", 'a');
@@ -287,6 +287,7 @@ int	main(void)
 	ft_printf("18) my       PRINTF : |%.X|\n", 88);
 	printf("19) standart PRINTF : |%X|\n", UINT_MAX);
 	ft_printf("19) my       PRINTF : |%X|\n", UINT_MAX);
+*/
 	ft_printf("--------------------%%u--------------------\n");
 	printf("01) standart PRINTF : |%u|\n", 34);
 	ft_printf("01) my       PRINTF : |%u|\n", 34);

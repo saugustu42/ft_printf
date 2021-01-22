@@ -1343,7 +1343,7 @@ int main()
 	//int a, b;
 	//t_flags a;
 	 test_basic();
-	 char_test();
+	// char_test();
 	// string_test();
 	// pointer_test();
 	// pointer_github_test();
@@ -1351,7 +1351,7 @@ int main()
 	// string_github_test();
 	// int_github_test();
 	// hex_github_test();
-	// uint_github_test();
+	 uint_github_test();
 	//new_year();
 	// tag_test();
 	// ft_printf("null: %.s$\n", NULL);
