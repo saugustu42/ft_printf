@@ -179,41 +179,30 @@ void		ft_putnstr(char *str, int *printed, int n)
 	}
 }
 
-void		ft_print_s_width(char *str, int *printed, t_flags *flags)
-{
-	int		min;
-
-	min = ft_strlen(str);
-	if (flags->dot != -1)
-	{
-		if (flags->dot < min)
-			min = flags->dot;
-	}
-	if (flags->width > min)
-		ft_putnchar(' ', printed, flags->width - min);
-}
-
 int			ft_print_s(char *str, int *printed, t_flags *flags)
 {
 	int		min;
+	int		allocated;
 
+	allocated = 0;
 	if (str == NULL)
 	{
-		if (!(str = ft_strdup("(null)")))
+		if (!(str = ft_strdup("(null)")) && (allocated = 1))
 			return (0);
 	}
-// need to free allocated
 	min = ft_strlen(str);
-	if (flags->dot != -1)
+	if (flags->dot > -1)
 	{
 		if (flags->dot < min)
 			min = flags->dot;
 	}
-	if (!flags->minus)
-		ft_print_s_width(str, printed, flags);
+	if (!flags->minus && flags->width > min)
+		ft_putnchar(' ', printed, flags->width - min);
 	ft_putnstr(str, printed, min);
-	if (flags->minus)
-		ft_print_s_width(str, printed, flags);
+	if (flags->minus && flags->width > min)
+		ft_putnchar(' ', printed, flags->width - min);
+	if (allocated)
+		free(str);
 	return (1);
 }
 
