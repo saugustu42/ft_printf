@@ -166,9 +166,60 @@ int			ft_print_sig(int num, int *printed)
 void		ft_putnchar(char c, int *printed, int n)
 {
 	while (n--)
-		ft_putchar(c, printed, n);
+		ft_putchar(c, printed);
 }
 
+void		ft_putnstr(char *str, int *printed, int n)
+{
+	while (*str && n)
+	{
+		ft_putchar(*str, printed);
+		str++;
+		n--;
+	}
+}
+
+void		ft_print_s_width(char *str, int *printed, t_flags *flags)
+{
+	int		min;
+
+	min = ft_strlen(str);
+	if (flags->dot != -1)
+	{
+		if (flags->dot < min)
+			min = flags->dot;
+	}
+	if (flags->width > min)
+		ft_putnchar(' ', printed, flags->width - min);
+}
+
+int			ft_print_s(char *str, int *printed, t_flags *flags)
+{
+	int		min;
+
+	if (str == NULL)
+	{
+		if (!(str = ft_strdup("(null)")))
+			return (0);
+	}
+// need to free allocated
+	min = ft_strlen(str);
+	if (flags->dot != -1)
+	{
+		if (flags->dot < min)
+			min = flags->dot;
+	}
+	if (!flags->minus)
+		ft_print_s_width(str, printed, flags);
+	ft_putnstr(str, printed, min);
+	if (flags->minus)
+		ft_print_s_width(str, printed, flags);
+	return (1);
+}
+
+
+
+/*
 int			ft_print_s(char *str, int *printed, t_flags *flags)
 {
 	int		len;
@@ -178,14 +229,15 @@ int			ft_print_s(char *str, int *printed, t_flags *flags)
 		if (!(str = ft_strdup("(null)")))
 			return (0);
 	}
-	len = ft_strlen(str);
-	ft_putstr(str, printed);
 // need to free allocated
-	if (!flags->minus)
-		ft_putnchar(
-	
+	len = ft_srtlen(str);
+	if (flags.dot > -1 && len > flags->dot)
+	{
+		len = flags->dot;
+		flags->dot = 0;
+	}
 }
-
+*/
 
 int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
 {
@@ -202,7 +254,7 @@ int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
 	}
 	if (*str == 'x' || *str == 'X')
 	{
-		if (!(ft_print_hex(va_arg(ap, int), printed, *str)))
+		if (!(ft_print_hex(va_arg(ap, unsigned int), printed, *str)))
 			return (0);
 	}
 	if (*str == 'p')
@@ -259,13 +311,16 @@ int			ft_parser(char **form, int *printed, va_list ap)
 	flags.width = ft_save_num(ap, form);
 	if (flags.width < 0)
 	{
-		flags.zero = 1;
+		flags.minus = 1;
 		flags.width *= -1;
 	}
 	if (flags.minus)
 		flags.zero = 0;
 	if (**form == '.')
+	{
+		(*form)++;
 		flags.dot = ft_save_num(ap, form);
+	}
 	if (!ft_print_parsed(*form, printed, ap, &flags))
 		return (0);
 	(*form)++;

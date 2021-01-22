@@ -1344,7 +1344,7 @@ int main()
 	//t_flags a;
 	 test_basic();
 	// char_test();
-	// string_test();
+	 string_test();
 	// pointer_test();
 	// pointer_github_test();
 	// char_github_test();

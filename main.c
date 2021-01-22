@@ -24,6 +24,14 @@ int			main(void)
 	ret2 = ft_printf("hello %s hi\n", "cat");
 	printf("orig %d my %d\n\n", ret1, ret2);
 
+	ret1 = printf("|%10s|\n", "cat");
+	ret1 = ft_printf("|%10s|\n", "cat");
+	printf("orig %d my %d\n\n", ret1, ret2);
+
+	ret1 = printf("|%10.2s|\n", "hello");
+	ret1 = ft_printf("|%10.2s|\n", "hello");
+	printf("orig %d my %d\n\n", ret1, ret2);
+
 	ret1 = printf("hello %u hi\n", 4242);
 	ret2 = ft_printf("hello %u hi\n", 4242);
 	printf("orig %d my %d\n\n", ret1, ret2);
