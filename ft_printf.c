@@ -206,34 +206,28 @@ int			ft_print_s(char *str, int *printed, t_flags *flags)
 	return (1);
 }
 
-
-
-/*
-int			ft_print_s(char *str, int *printed, t_flags *flags)
+int			ft_print_c(char c, int *printed, t_flags *flags)
 {
-	int		len;
+	char	filler;
 
-	if (str == NULL)
-	{
-		if (!(str = ft_strdup("(null)")))
-			return (0);
-	}
-// need to free allocated
-	len = ft_srtlen(str);
-	if (flags.dot > -1 && len > flags->dot)
-	{
-		len = flags->dot;
-		flags->dot = 0;
-	}
+	filler = ' ';
+	if (flags->zero)
+		filler = '0';
+	if (!flags->minus && flags->width > 1)
+		ft_putnchar(filler, printed, flags->width - 1);
+	ft_putchar(c, printed);
+	if (flags->minus && flags->width > 1)
+		ft_putnchar(filler, printed, flags->width - 1);
+	return (1);
 }
-*/
+
 
 int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
 {
 	if (*str == '%')
-		ft_putchar('%', printed);
+		return (ft_print_c('%', printed, flags));
 	if (*str == 'c')
-		ft_putchar(va_arg(ap, int), printed);
+		return (ft_print_c(va_arg(ap, int), printed, flags));
 	if (*str == 's')
 		return (ft_print_s(va_arg(ap, char *), printed, flags));
 	if (*str == 'u')
