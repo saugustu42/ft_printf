@@ -256,7 +256,7 @@ int			ft_print_u(unsigned int num, int *printed, t_flags *flags, char c)
 	return (1);
 }
 
-int			ft_print_p(unsigned int num, int *printed, t_flags *flags)
+int			ft_print_p(unsigned long num, int *printed, t_flags *flags)
 {
 	char	*str;
 	int		len;
@@ -268,7 +268,20 @@ int			ft_print_p(unsigned int num, int *printed, t_flags *flags)
 	if (!str)
 		return (0);
 	len = ft_strlen(str);
-	retutn (1);
+	if (!flags->minus)
+	{
+		if (flags->width > len + 2)
+			ft_putnchar(' ', printed, flags->width - len - 2);
+	}
+	*printed += write(1, "0x", 2);
+	ft_putstr(str, printed);
+	if (flags->minus)
+	{
+		if (flags->width > len + 2)
+			ft_putnchar(' ', printed, flags->width - len - 2);
+	}
+	free(str);
+	return (1);
 }
 
 
@@ -285,14 +298,10 @@ int			ft_print_parsed(const char *str, int *printed,
 		return (ft_print_u(va_arg(ap, unsigned int), printed, flags, *str));
 	if (*str == 'x' || *str == 'X')
 		return (ft_print_u(va_arg(ap, unsigned int), printed, flags, *str));
-/*
 	if (*str == 'p')
-	{
-	}
+		return (ft_print_p(va_arg(ap, unsigned long), printed, flags));
 	if (*str == 'i' || *str == 'd')
-	{
-	}
-*/
+		return(1);
 	return (1);
 }
 
