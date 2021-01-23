@@ -207,6 +207,7 @@ int	main(void)
 	ft_printf("31) my       PRINTF : |%.d|\n", 0);
 	printf("32) standart PRINTF : |%.d|\n", 100);
 	ft_printf("32) my       PRINTF : |%.d|\n", 100);
+*/
 	ft_printf("--------------------%%x--------------------\n");
 	printf("01) standart PRINTF : |%x|\n", 34);
 	ft_printf("01) my       PRINTF : |%x|\n", 34);
@@ -287,7 +288,6 @@ int	main(void)
 	ft_printf("18) my       PRINTF : |%.X|\n", 88);
 	printf("19) standart PRINTF : |%X|\n", UINT_MAX);
 	ft_printf("19) my       PRINTF : |%X|\n", UINT_MAX);
-*/
 	ft_printf("--------------------%%u--------------------\n");
 	printf("01) standart PRINTF : |%u|\n", 34);
 	ft_printf("01) my       PRINTF : |%u|\n", 34);
@@ -333,6 +333,7 @@ int	main(void)
 	ft_printf("21) my       PRINTF : |%u|\n", UINT_MAX);
 	printf("22) standart PRINTF : |%u| |%u|\n", (unsigned int)-1, UINT_MAX + 1);
 	ft_printf("22) my       PRINTF : |%u| |%u|\n", (unsigned int)-1, UINT_MAX + 1);
+/*
 	ft_printf("--------------------%%---------------------\n");
 	printf("01) standart PRINTF : |%5%|\n");
 	ft_printf("01) my       PRINTF : |%5%|\n");
@@ -377,4 +378,5 @@ int	main(void)
 
 	printf("04) standart PRINTF : |%10p|\n", "-42");
 	ft_printf("04) my       PRINTF : |%10p|\n", "-42");
+*/
 }

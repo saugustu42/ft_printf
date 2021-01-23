@@ -59,26 +59,26 @@ static int	ch_count(unsigned long n, int base)
 	return (counter);
 }
 
-char		*ft_conv_pos(unsigned long n, int base)
+char		*ft_conv_pos(unsigned long n, int bs, char c)
 {
 	char	*str;
-	int		char_count;
+	int		len;
 
 	if (n == 0)
 		return (ft_strdup("0"));
-	char_count = ch_count(n, base);
-	str = malloc(sizeof(char) * (char_count + 1));
+	len = ch_count(n, bs);
+	str = malloc(len + 1);
 	if (str == NULL)
 		return (NULL);
-	str[char_count] = '\0';
-	while (char_count && n)
+	str[len] = '\0';
+	while (len && n)
 	{
-		if (n % base < 10)
-			str[char_count - 1] = n % base + '0';
+		if (n % bs < 10)
+			str[len - 1] = n % bs + '0';
 		else
-			str[char_count - 1] = n % base + 'a' - 10;
-		n = n / base;
-		char_count--;
+			str[len - 1] = (c == 'x') ? n % bs + 'a' - 10 : n % bs + 'A' - 10;
+		n = n / bs;
+		len--;
 	}
 	return (str);
 }
@@ -105,12 +105,13 @@ void		ft_putstr(char *str, int *printed)
 }
 
 
+/*
 int			ft_print_hex(unsigned long num, int *printed, char c)
 {
 	char	*str;
 	int		i;
 
-	str = ft_conv_pos(num, 16);
+	str = ft_conv_pos(num, 16, c);
 	if (!str)
 		return (0);
 	if (c == 'X')
@@ -141,7 +142,7 @@ int			ft_print_sig(int num, int *printed)
 		negative = 1;
 		n_long = -n_long;
 	}
-	str = ft_conv_pos(n_long, 10);
+	str = ft_conv_pos(n_long, 10, c);
 	if (!str)
 		return (0);
 	if (negative)
@@ -150,6 +151,7 @@ int			ft_print_sig(int num, int *printed)
 	free(str);
 	return (1);
 }
+*/
 
 void		ft_putnchar(char c, int *printed, int n)
 {
@@ -227,6 +229,7 @@ void		set_numbers(int len, t_flags *flags)
 		flags->width = 0;
 }
 
+/*
 int			ft_print_u(unsigned int num, int *printed, t_flags *flags)
 {
 	char	*str;
@@ -252,9 +255,64 @@ int			ft_print_u(unsigned int num, int *printed, t_flags *flags)
 	free(str);
 	return (1);
 }
+*/
 
+int			ft_print_u(unsigned int num, int *printed, t_flags *flags, char c)
+{
+	char	*str;
+	int		len;
+	int		fill;
+	char	filler;
 
-int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
+	filler = (flags->zero) ? '0' : ' ';
+	if (num == 0 && flags->dot == 0)
+		str = ft_strdup("");
+	else
+		str = (c == 'u') ? ft_conv_pos(num, 10, c) : ft_conv_pos(num, 16, c);
+	if (!str)
+		return (0);
+	len = ft_strlen(str);
+	set_numbers(len, flags);
+	if (!flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+	ft_putnchar('0', printed, flags->dot);
+	ft_putstr(str, printed);
+	if (flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+	free(str);
+	return (1);
+}
+
+/*
+int			ft_print_x(unsigned int num, int *printed, t_flags *flags, char c)
+{
+	char	*str;
+	int		len;
+	int		fill;
+	char	filler;
+
+	filler = (flags->zero) ? '0' : ' ';
+	if (num == 0 && flags->dot == 0)
+		str = ft_strdup("");
+	else
+		str = ft_conv_pos(num, 16, c);
+	if (!str)
+		return (0);
+	len = ft_strlen(str);
+	set_numbers(len, flags);
+	if (!flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+	ft_putnchar('0', printed, flags->dot);
+	ft_putstr(str, printed);
+	if (flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+	free(str);
+	return (1);
+}
+*/
+
+int			ft_print_parsed(const char *str, int *printed,
+		va_list ap, t_flags *flags)
 {
 	if (*str == '%')
 		return (ft_print_c('%', printed, flags));
@@ -263,19 +321,17 @@ int			ft_print_parsed(const char *str, int *printed, va_list ap, t_flags *flags)
 	if (*str == 's')
 		return (ft_print_s(va_arg(ap, char *), printed, flags));
 	if (*str == 'u')
-		return (ft_print_u(va_arg(ap, unsigned int), printed, flags));
+		return (ft_print_u(va_arg(ap, unsigned int), printed, flags, *str));
 	if (*str == 'x' || *str == 'X')
-	{
-		if (!(ft_print_hex(va_arg(ap, unsigned int), printed, *str)))
-			return (0);
-	}
+		return (ft_print_u(va_arg(ap, unsigned int), printed, flags, *str));
+/*
 	if (*str == 'p')
 	{
-		if (!(ft_print_hex(va_arg(ap, unsigned long), printed, *str)))
-			return (0);
 	}
 	if (*str == 'i' || *str == 'd')
-		return (ft_print_sig(va_arg(ap, int), printed));
+	{
+	}
+*/
 	return (1);
 }
 
