@@ -284,6 +284,65 @@ int			ft_print_p(unsigned long num, int *printed, t_flags *flags)
 	return (1);
 }
 
+void		ft_set_numbers_sig(char *str, int neg, t_flags *flags)
+{
+	int		bigger;
+	int		len;
+
+	len = ft_strlen(str);
+	bigger = len;
+	if (neg && flags->width)
+		flags->width--;
+	if (flags->dot > bigger)
+	{
+		bigger = flags->dot;
+		flags->dot = flags->dot - len;
+	}
+	else
+		flags->dot = 0;
+	if (flags->width > bigger)
+		flags->width = flags->width - bigger;
+	else
+		flags->width = 0;
+}
+
+void		ft_print_sig(char *str, int *printed, int neg, t_flags *flags)
+{
+	char	filler;
+
+	filler = (flags->dot == -1 && flags->zero) ? '0' : ' ';
+	if (!flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+	if (neg)
+		ft_putchar('-', printed);
+	ft_putnchar('0', printed, flags->dot);
+	ft_putstr(str, printed);
+	if (flags->minus)
+		ft_putnchar(filler, printed, flags->width);
+}
+
+int			ft_prepare_sig(int num, int *printed, t_flags *flags)
+{
+	long	n;
+	int		neg;
+	char	*str;
+
+	n = (long)num;
+	neg = (n < 0) ? 1 : 0;
+	if (neg)
+		n = -n;
+	if (n == 0 && flags->dot == 0)
+		str = ft_strdup("");
+	else
+		str = ft_conv_pos(n, 10, 'i');
+	if (!str)
+		return (0);
+	ft_set_numbers_sig(str, neg, flags);
+	ft_print_sig(str, printed, neg, flags);
+	free(str);
+	return (1);
+}
+
 
 int			ft_print_parsed(const char *str, int *printed,
 		va_list ap, t_flags *flags)
@@ -301,7 +360,7 @@ int			ft_print_parsed(const char *str, int *printed,
 	if (*str == 'p')
 		return (ft_print_p(va_arg(ap, unsigned long), printed, flags));
 	if (*str == 'i' || *str == 'd')
-		return(1);
+		return (ft_prepare_sig(va_arg(ap, int), printed, flags));
 	return (1);
 }
 
