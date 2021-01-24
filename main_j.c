@@ -1340,7 +1340,7 @@ void	tag_test()
 
 int main()
 {
-	//int a, b;
+	int a, b;
 //	t_flags a;
 	// test_basic();
 	// char_test();
@@ -1349,20 +1349,20 @@ int main()
 //	 pointer_github_test();
 //	 char_github_test();
 //	 string_github_test();
-	 int_github_test();
-	 hex_github_test();
-	 //uint_github_test();
-	//new_year();
-	// tag_test();
-	// ft_printf("null: %.s$\n", NULL);
-	// printf("null: %.s$\n", NULL);
-	// ft_printf("null: %.0s$\n", NULL);
-	//a = printf("null: %*s$\n",10);
-	//b = ft_printf("null: %*s$\n",10);
-	// printf("%p\n", &a);
-	// ft_printf("%p\n", &a);
-	//printf("|% 2s$|\n", "1");
-	//ft_printf("|% 2s$|\n", "1");
+//	 int_github_test();
+//	 hex_github_test();
+	 uint_github_test();
+//	new_year();
+//	 tag_test();
+//	 ft_printf("null: %.s$\n", NULL);
+//	 printf("null: %.s$\n", NULL);
+//	 ft_printf("null: %.0s$\n", NULL);
+//	a = printf("null: %*s$\n",10);
+//	b = ft_printf("null: %*s$\n",10);
+//	 printf("%p\n", &a);
+//	 ft_printf("%p\n", &a);
+//	printf("|% 2s$|\n", "1");
+//	ft_printf("|% 2s$|\n", "1");
 	// ft_printf("%.30p\n", NULL);
 
 }

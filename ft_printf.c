@@ -234,7 +234,6 @@ int			ft_print_u(unsigned int num, int *printed, t_flags *flags, char c)
 {
 	char	*str;
 	int		len;
-	int		fill;
 	char	filler;
 
 	filler = (flags->zero) ? '0' : ' ';
