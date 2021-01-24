@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: saugustu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/24 20:14:18 by saugustu          #+#    #+#             */
+/*   Updated: 2021/01/24 20:28:19 by saugustu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 #include <stdlib.h>
 
@@ -104,55 +116,6 @@ void		ft_putstr(char *str, int *printed)
 	}
 }
 
-
-/*
-int			ft_print_hex(unsigned long num, int *printed, char c)
-{
-	char	*str;
-	int		i;
-
-	str = ft_conv_pos(num, 16, c);
-	if (!str)
-		return (0);
-	if (c == 'X')
-	{
-		i = 0;
-		while (str[i])
-		{
-			if (str[i] >= 'a' && str[i] <= 'f')
-				str[i] -= ' ';
-			i++;
-		}
-	}
-	ft_putstr(str, printed);
-	free(str);
-	return (1);
-}
-
-int			ft_print_sig(int num, int *printed)
-{
-	long	n_long;
-	int		negative;
-	char	*str;
-
-	negative = 0;
-	n_long = num;
-	if (n_long < 0)
-	{
-		negative = 1;
-		n_long = -n_long;
-	}
-	str = ft_conv_pos(n_long, 10, c);
-	if (!str)
-		return (0);
-	if (negative)
-		ft_putchar('-', printed);
-	ft_putstr(str, printed);
-	free(str);
-	return (1);
-}
-*/
-
 void		ft_putnchar(char c, int *printed, int n)
 {
 	while (n--)
@@ -177,8 +140,10 @@ int			ft_print_s(char *str, int *printed, t_flags *flags)
 	allocated = 0;
 	if (str == NULL)
 	{
-		if (!(str = ft_strdup("(null)")) && (allocated = 1))
+		if (!(str = ft_strdup("(null)")))
 			return (0);
+		else
+			allocated = 1;
 	}
 	min = ft_strlen(str);
 	if (flags->dot > -1)
@@ -214,7 +179,7 @@ int			ft_print_c(char c, int *printed, t_flags *flags)
 void		set_numbers(int len, t_flags *flags)
 {
 	int		bigger;
-	
+
 	bigger = len;
 	if (flags->dot > len)
 	{
@@ -228,7 +193,6 @@ void		set_numbers(int len, t_flags *flags)
 	else
 		flags->width = 0;
 }
-
 
 int			ft_print_u(unsigned int num, int *printed, t_flags *flags, char c)
 {
@@ -352,7 +316,6 @@ int			ft_prepare_sig(int num, int *printed, t_flags *flags)
 	return (1);
 }
 
-
 int			ft_print_parsed(const char *str, int *printed,
 		va_list ap, t_flags *flags)
 {
@@ -401,12 +364,10 @@ void		ft_set_flags(t_flags *flags)
 	flags->dot = -1;
 }
 
-
-
 int			ft_parser(char **form, int *printed, va_list ap)
 {
 	t_flags flags;
-	
+
 	ft_set_flags(&flags);
 	while (**form == '-' || **form == '0')
 	{
@@ -447,8 +408,7 @@ int		ft_isdigit(int c)
 int			ft_printf(const char *form, ...)
 {
 	int		printed;
-
-	char *tmp;
+	char	*tmp;
 	va_list ap;
 
 	tmp = (char *)form;
@@ -462,14 +422,11 @@ int			ft_printf(const char *form, ...)
 			if (!(ft_parser(&(tmp), &printed, ap)))
 			{
 				printed = -1;
-				break;
+				break ;
 			}
 		}
 		else
-		{
-			ft_putchar(*tmp, &printed);
-			tmp++;
-		}
+			ft_putchar(*tmp++, &printed);
 	}
 	va_end(ap);
 	return (printed);
