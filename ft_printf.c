@@ -363,6 +363,8 @@ int			ft_print_parsed(const char *str, int *printed,
 		return (ft_print_c(va_arg(ap, int), printed, flags));
 	if (*str == 's')
 		return (ft_print_s(va_arg(ap, char *), printed, flags));
+	if (flags->dot > -1)
+		flags->zero = 0;
 	if (*str == 'u')
 		return (ft_print_u(va_arg(ap, unsigned int), printed, flags, *str));
 	if (*str == 'x' || *str == 'X')
@@ -428,8 +430,6 @@ int			ft_parser(char **form, int *printed, va_list ap)
 		(*form)++;
 		flags.dot = ft_save_num(ap, form);
 	}
-	if (flags.dot > -1)
-		flags.zero = 0;
 	if (!ft_print_parsed(*form, printed, ap, &flags))
 		return (0);
 	(*form)++;
