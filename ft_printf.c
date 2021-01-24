@@ -284,13 +284,15 @@ int			ft_print_p(unsigned long num, int *printed, t_flags *flags)
 	return (1);
 }
 
-void		ft_set_numbers_sig(char *str, int neg, t_flags *flags)
+int			ft_set_numbers_sig(char *str, int neg, t_flags *flags)
 {
 	int		bigger;
 	int		len;
+	int		nodot;
 
 	len = ft_strlen(str);
 	bigger = len;
+	nodot = (flags->dot == -1) ? 1 : 0;
 	if (neg && flags->width)
 		flags->width--;
 	if (flags->dot > bigger)
@@ -304,13 +306,20 @@ void		ft_set_numbers_sig(char *str, int neg, t_flags *flags)
 		flags->width = flags->width - bigger;
 	else
 		flags->width = 0;
+	return (nodot);
 }
 
-void		ft_print_sig(char *str, int *printed, int neg, t_flags *flags)
+void		ft_print_sig(char *str, int *printed, int neg,
+		int nodot, t_flags *flags)
 {
 	char	filler;
 
-	filler = (flags->dot == -1 && flags->zero) ? '0' : ' ';
+	filler = (nodot && flags->zero) ? '0' : ' ';
+	if (nodot && flags->zero && neg)
+	{
+		ft_putchar('-', printed);
+		neg = 0;
+	}
 	if (!flags->minus)
 		ft_putnchar(filler, printed, flags->width);
 	if (neg)
@@ -325,6 +334,7 @@ int			ft_prepare_sig(int num, int *printed, t_flags *flags)
 {
 	long	n;
 	int		neg;
+	int		nodot;
 	char	*str;
 
 	n = (long)num;
@@ -337,8 +347,8 @@ int			ft_prepare_sig(int num, int *printed, t_flags *flags)
 		str = ft_conv_pos(n, 10, 'i');
 	if (!str)
 		return (0);
-	ft_set_numbers_sig(str, neg, flags);
-	ft_print_sig(str, printed, neg, flags);
+	nodot = ft_set_numbers_sig(str, neg, flags);
+	ft_print_sig(str, printed, neg, nodot, flags);
 	free(str);
 	return (1);
 }
