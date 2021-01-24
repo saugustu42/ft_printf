@@ -1342,8 +1342,8 @@ int main()
 {
 	//int a, b;
 	//t_flags a;
-	 test_basic();
-	// char_test();
+	// test_basic();
+	 char_test();
 	// string_test();
 	// pointer_test();
 	// pointer_github_test();

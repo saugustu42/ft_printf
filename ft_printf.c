@@ -428,6 +428,8 @@ int			ft_parser(char **form, int *printed, va_list ap)
 		(*form)++;
 		flags.dot = ft_save_num(ap, form);
 	}
+	if (flags.dot > -1)
+		flags.zero = 0;
 	if (!ft_print_parsed(*form, printed, ap, &flags))
 		return (0);
 	(*form)++;
