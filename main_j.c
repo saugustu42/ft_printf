@@ -1347,10 +1347,10 @@ int main()
 	// string_test();
 //	 pointer_test();
 //	 pointer_github_test();
-	 char_github_test();
-	 string_github_test();
-	// int_github_test();
-	// hex_github_test();
+//	 char_github_test();
+//	 string_github_test();
+	 int_github_test();
+	 hex_github_test();
 	 //uint_github_test();
 	//new_year();
 	// tag_test();
