@@ -1,40 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   put_count.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saugustu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/24 20:14:18 by saugustu          #+#    #+#             */
-/*   Updated: 2021/01/25 20:53:43 by saugustu         ###   ########.fr       */
+/*   Created: 2021/01/25 20:28:30 by saugustu          #+#    #+#             */
+/*   Updated: 2021/01/25 20:30:36 by saugustu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int			ft_printf(const char *form, ...)
+void		ft_putchar_c(char c, int *printed)
 {
-	int		printed;
-	char	*tmp;
-	va_list ap;
+	*printed += write(1, &c, 1);
+}
 
-	tmp = (char *)form;
-	va_start(ap, form);
-	printed = 0;
-	while (*tmp)
+void		ft_putstr_c(char *str, int *printed)
+{
+	while (*str)
 	{
-		if (*tmp == '%' && *(tmp + 1))
-		{
-			tmp++;
-			if (!(ft_parser(&(tmp), &printed, ap)))
-			{
-				printed = -1;
-				break ;
-			}
-		}
-		else
-			ft_putchar_c(*tmp++, &printed);
+		ft_putchar_c(*str, printed);
+		str++;
 	}
-	va_end(ap);
-	return (printed);
+}
+
+void		ft_putnchar(char c, int *printed, int n)
+{
+	while (n--)
+		ft_putchar_c(c, printed);
+}
+
+void		ft_putnstr(char *str, int *printed, int n)
+{
+	while (*str && n)
+	{
+		ft_putchar_c(*str, printed);
+		str++;
+		n--;
+	}
 }
