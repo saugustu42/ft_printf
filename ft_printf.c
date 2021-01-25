@@ -6,7 +6,7 @@
 /*   By: saugustu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 20:14:18 by saugustu          #+#    #+#             */
-/*   Updated: 2021/01/25 18:16:59 by saugustu         ###   ########.fr       */
+/*   Updated: 2021/01/25 18:59:42 by saugustu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,11 +272,12 @@ int			ft_set_numbers_sig(char *str, int neg, t_flags *flags)
 	return (nodot);
 }
 
-void		ft_print_sig(char *str, int *printed, int neg,
-		int nodot, t_flags *flags)
+void		ft_put_sig(char *str, int *printed, int neg, t_flags *flags)
 {
 	char	filler;
+	int		nodot;
 
+	nodot = ft_set_numbers_sig(str, neg, flags);
 	filler = (nodot && flags->zero) ? '0' : ' ';
 	if (nodot && flags->zero && neg)
 	{
@@ -293,11 +294,10 @@ void		ft_print_sig(char *str, int *printed, int neg,
 		ft_putnchar(filler, printed, flags->width);
 }
 
-int			ft_prepare_sig(int num, int *printed, t_flags *flags)
+int			ft_print_sig(int num, int *printed, t_flags *flags)
 {
 	long	n;
 	int		neg;
-	int		nodot;
 	char	*str;
 
 	n = (long)num;
@@ -310,8 +310,7 @@ int			ft_prepare_sig(int num, int *printed, t_flags *flags)
 		str = ft_conv_pos(n, 10, 'i');
 	if (!str)
 		return (0);
-	nodot = ft_set_numbers_sig(str, neg, flags);
-	ft_print_sig(str, printed, neg, nodot, flags);
+	ft_put_sig(str, printed, neg, flags);
 	free(str);
 	return (1);
 }
@@ -341,7 +340,7 @@ int			ft_print_parsed(const char *str, int *printed,
 	if (*str == 'p')
 		return (ft_print_p(va_arg(ap, unsigned long), printed, flags));
 	if (*str == 'i' || *str == 'd')
-		return (ft_prepare_sig(va_arg(ap, int), printed, flags));
+		return (ft_print_sig(va_arg(ap, int), printed, flags));
 	return (0);
 }
 
