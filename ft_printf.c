@@ -6,7 +6,7 @@
 /*   By: saugustu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 20:14:18 by saugustu          #+#    #+#             */
-/*   Updated: 2021/01/25 17:50:21 by saugustu         ###   ########.fr       */
+/*   Updated: 2021/01/25 18:16:59 by saugustu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char		*ft_conv_pos(unsigned long n, int bs, char c)
 	return (str);
 }
 
-void		ft_putchar(char c, int *printed)
+void		ft_putchar_c(char c, int *printed)
 {
 	*printed += write(1, &c, 1);
 }
@@ -104,14 +104,14 @@ void		ft_putnbr(int n, int *printed)
 {
 	if (n / 10)
 		ft_putnbr(n / 10, printed);
-	ft_putchar(n % 10 + '0', printed);
+	ft_putchar_c(n % 10 + '0', printed);
 }
 
-void		ft_putstr(char *str, int *printed)
+void		ft_putstr_c(char *str, int *printed)
 {
 	while (*str)
 	{
-		ft_putchar(*str, printed);
+		ft_putchar_c(*str, printed);
 		str++;
 	}
 }
@@ -119,14 +119,14 @@ void		ft_putstr(char *str, int *printed)
 void		ft_putnchar(char c, int *printed, int n)
 {
 	while (n--)
-		ft_putchar(c, printed);
+		ft_putchar_c(c, printed);
 }
 
 void		ft_putnstr(char *str, int *printed, int n)
 {
 	while (*str && n)
 	{
-		ft_putchar(*str, printed);
+		ft_putchar_c(*str, printed);
 		str++;
 		n--;
 	}
@@ -170,7 +170,7 @@ int			ft_print_c(char c, int *printed, t_flags *flags)
 		filler = '0';
 	if (!flags->minus && flags->width > 1)
 		ft_putnchar(filler, printed, flags->width - 1);
-	ft_putchar(c, printed);
+	ft_putchar_c(c, printed);
 	if (flags->minus && flags->width > 1)
 		ft_putnchar(filler, printed, flags->width - 1);
 	return (1);
@@ -212,7 +212,7 @@ int			ft_print_u(unsigned int num, int *printed, t_flags *flags, char c)
 	if (!flags->minus)
 		ft_putnchar(filler, printed, flags->width);
 	ft_putnchar('0', printed, flags->dot);
-	ft_putstr(str, printed);
+	ft_putstr_c(str, printed);
 	if (flags->minus)
 		ft_putnchar(filler, printed, flags->width);
 	free(str);
@@ -237,7 +237,7 @@ int			ft_print_p(unsigned long num, int *printed, t_flags *flags)
 			ft_putnchar(' ', printed, flags->width - len - 2);
 	}
 	*printed += write(1, "0x", 2);
-	ft_putstr(str, printed);
+	ft_putstr_c(str, printed);
 	if (flags->minus)
 	{
 		if (flags->width > len + 2)
@@ -280,15 +280,15 @@ void		ft_print_sig(char *str, int *printed, int neg,
 	filler = (nodot && flags->zero) ? '0' : ' ';
 	if (nodot && flags->zero && neg)
 	{
-		ft_putchar('-', printed);
+		ft_putchar_c('-', printed);
 		neg = 0;
 	}
 	if (!flags->minus)
 		ft_putnchar(filler, printed, flags->width);
 	if (neg)
-		ft_putchar('-', printed);
+		ft_putchar_c('-', printed);
 	ft_putnchar('0', printed, flags->dot);
-	ft_putstr(str, printed);
+	ft_putstr_c(str, printed);
 	if (flags->minus)
 		ft_putnchar(filler, printed, flags->width);
 }
@@ -319,6 +319,13 @@ int			ft_prepare_sig(int num, int *printed, t_flags *flags)
 int			ft_print_parsed(const char *str, int *printed,
 		va_list ap, t_flags *flags)
 {
+	if (flags->width < 0)
+	{
+		flags->minus = 1;
+		flags->width *= -1;
+	}
+	if (flags->minus)
+		flags->zero = 0;
 	if (*str == '%')
 		return (ft_print_c('%', printed, flags));
 	if (*str == 'c')
@@ -378,13 +385,6 @@ int			ft_parser(char **form, int *printed, va_list ap)
 		(*form)++;
 	}
 	flags.width = ft_save_num(ap, form);
-	if (flags.width < 0)
-	{
-		flags.minus = 1;
-		flags.width *= -1;
-	}
-	if (flags.minus)
-		flags.zero = 0;
 	if (**form == '.')
 	{
 		(*form)++;
@@ -426,7 +426,7 @@ int			ft_printf(const char *form, ...)
 			}
 		}
 		else
-			ft_putchar(*tmp++, &printed);
+			ft_putchar_c(*tmp++, &printed);
 	}
 	va_end(ap);
 	return (printed);
