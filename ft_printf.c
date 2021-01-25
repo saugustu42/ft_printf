@@ -6,7 +6,7 @@
 /*   By: saugustu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 20:14:18 by saugustu          #+#    #+#             */
-/*   Updated: 2021/01/24 20:28:19 by saugustu         ###   ########.fr       */
+/*   Updated: 2021/01/25 17:50:21 by saugustu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,7 +335,7 @@ int			ft_print_parsed(const char *str, int *printed,
 		return (ft_print_p(va_arg(ap, unsigned long), printed, flags));
 	if (*str == 'i' || *str == 'd')
 		return (ft_prepare_sig(va_arg(ap, int), printed, flags));
-	return (1);
+	return (0);
 }
 
 int			ft_save_num(va_list ap, char **form)

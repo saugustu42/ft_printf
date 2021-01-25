@@ -6,7 +6,7 @@
 #    By: saugustu <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/24 18:08:32 by saugustu          #+#    #+#              #
-#    Updated: 2021/01/24 18:12:11 by saugustu         ###   ########.fr        #
+#    Updated: 2021/01/25 17:55:30 by saugustu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,3 +30,11 @@ $(NAME) : $(OBJ)
 	gcc $(FLAGS) $(OPTFLAGS) -c $< -o $@ -MD
 
 include $(wildcard $(D_FILES))
+
+clean :
+	rm -f $(OBJ) $(D_FILES)
+
+fclean : clean
+	rm -f $(NAME)
+
+re : fclean all
